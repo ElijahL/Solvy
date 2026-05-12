@@ -1,0 +1,1 @@
+The folder consists of esol.cvs which is was downloaded from [HuggingFace](https://huggingface.co/datasets/scikit-fingerprints/MoleculeNet_ESOL/raw/main/esol.csv) (link as of 2026-05-12)
