@@ -1,0 +1,1 @@
+Storage for all models. This is where they are read for inference, and this is the place were newly trained models are stored

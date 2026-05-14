@@ -1,0 +1,1 @@
+Contains assets for READMEs to be displayed on GitHub

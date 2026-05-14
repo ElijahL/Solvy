@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "fastapi[standard]>=0.136.1",
     "ipykernel>=7.2.0",
     "pandas>=3.0.3",
     "pip>=26.1.1",
@@ -12,4 +13,7 @@ dependencies = [
     "rdkit>=2026.3.1",
     "scikit-learn>=1.8.0",
     "torch>=2.11.0",
+    "uvicorn>=0.47.0",
 ]
+[tool.fastapi]
+entrypoint = "src.backend.app:app"

@@ -1,0 +1,1 @@
+Folder for backend server. FastAPI is used as a backend framework + uvicorn for serving
