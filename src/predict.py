@@ -45,7 +45,7 @@ def smiles_to_fp(smiles, method="maccs", n_bits=2048):
 def load_model():
     import os
     print(os.getcwd())
-    with open(r"./models/random_forest_regressor_20260514", "rb") as f:
+    with open(r"./models/random_forest_regressor_20260514.pkl", "rb") as f:
         return pickle.load(f)
 
 def predict_solubility(smiles: str) -> float:
