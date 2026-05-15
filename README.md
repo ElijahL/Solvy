@@ -7,7 +7,7 @@ Very first steps, I'm not quite sure what the project will look like in the end,
 The purpose of the project is to put any knowledge gained from `TeachOpenCadd` and `Bioinformatics Data Skills` into practise, learning ML production code along the way.
 
 # Description
-It trains Chemprop (Graph Neural Network. [Github](https://github.com/chemprop/chemprop)) on sollubilty using the [ESOL dataset](https://huggingface.co/datasets/scikit-fingerprints/MoleculeNet_ESOL/raw/main/esol.csv) (link as of 2026-05-12)
+Based on [ESOL dataset](https://huggingface.co/datasets/scikit-fingerprints/MoleculeNet_ESOL/raw/main/esol.csv) (link as of 2026-05-12) we are trying to predict the solubility of a given molecule. The end goal is to make end-to-end ML pipeline, with backend running in Docker container, W&B for model monitoring, and to use Chemprop (Graph Neural Network. [Github](https://github.com/chemprop/chemprop)) for prediction
 
 # Proposed repo structure
 ```
