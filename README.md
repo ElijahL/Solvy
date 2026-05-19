@@ -1,6 +1,6 @@
 # Intro
 
-This is an experimental project, which I use to learn ML/MLOps and how it is applicable to bioinformatics
+This is an experimental project, mainly to learn ML/MLOps and see the applications of it bioinformatics field
 
 Very first steps, I'm not quite sure what the project will look like in the end, but hope it will be fun!
 

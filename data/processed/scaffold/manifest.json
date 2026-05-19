@@ -1,0 +1,10 @@
+{
+    "split_method": "scaffold",
+    "name": "esol",
+    "frac_train": 0.8,
+    "frac_val": 0.1,
+    "frac_test": 0.1,
+    "train_len": 902,
+    "val_len": 112,
+    "test_len": 114
+}
