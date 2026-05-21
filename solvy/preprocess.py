@@ -6,13 +6,23 @@ import os
 import json
 import pandas as pd
 import hashlib
-from datetime import datetime, timezone
-from pathlib import Path
-
+import logging
 import rdkit
-from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
+
+from datetime import datetime, timezone
+from dataclasses import asdict
+from pathlib import Path
 from collections import defaultdict
+
+from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from solvy.utils import load_config
+from solvy.standardize import standardize
+
+
+logger = logging.getLogger(__name__)
+
+
+SPLIT_METHODS = {"scaffold"}
 
 
 def scaffold_splits(
@@ -96,23 +106,28 @@ def preprocess(
     None
     """
     df = pd.read_csv(fr"data/raw/esol.csv")
-    available_split_methods = {"scaffold"}
-    assert split_method in available_split_methods, (
+    assert split_method in SPLIT_METHODS, (
         f"Split method {split_method} doesn't exist!"
         f" Please choose one of the following: {available_split_methods}"
     )
+
+    standardized_df = pd.DataFrame([
+        asdict(res)
+        for res in df[smiles_col].apply(standardize)
+    ])
+    standardized_df = df.merge(standardized_df, left_on=smiles_col, right_on="input_smiles")
 
     # Identify split methods
     if split_method == "scaffold":
         if not smiles_col:
             raise ValueError("Smiles column is not provided for scaffold method!")
 
-        smiles_list = df[smiles_col]
+        smiles_list = standardized_df["output_smiles"]
         train_idx, val_idx, test_idx = scaffold_splits(
             smiles_list=smiles_list, frac_train=frac_train, frac_test=frac_test, frac_val=frac_val
         )
 
-    file_name_fmt = "{name}_{split_type}.csv"
+    file_name_fmt = "{name}_{split_type}.parquet"
     folder_name = Path("data/processed") / split_method
     folder_name.mkdir(parents=True, exist_ok=True)
 
@@ -146,22 +161,35 @@ def preprocess(
     ]
     for split_type, split_indices in splits:
         split_filepath = folder_name / file_name_fmt.format(name=name, split_type=split_type)
-        df.iloc[split_indices].to_csv(split_filepath, compression="gzip")
+        standardized_df.iloc[split_indices].to_parquet(split_filepath)
 
 
 if __name__ == "__main__":
     cfg = load_config("datasets")
-    dataset_name = "esol"
-    dataset_cfg = cfg[dataset_name]
+    import argparse
+    parser = argparse.ArgumentParser(
+        description=(
+            "A program that clears the data for provided dataset"
+            " (config for which is stored in /configs) and splits the data to train / val / test"
+            " according to the split method provided"
+        )
+    )
+    parser.add_argument("dataset", choices=list(cfg.keys()))
+    parser.add_argument("--data-dir", default="data/raw")
+    parser.add_argument("--split-method", default="scaffold", choices=list(SPLIT_METHODS))
+    args = parser.parse_args()
 
-    data_dir = Path("data/raw")
+    dataset_name = args.dataset
+    dataset_cfg = cfg[dataset_name]
+    data_dir = Path(args.data_dir)
     source_file = data_dir / dataset_cfg["filename"]
+    split_method = args.split_method
     preprocess(
         name=dataset_name,
         source_file=source_file,
         source_sha256=dataset_cfg["sha256"],
         smiles_col="SMILES",
-        split_method="scaffold",
+        split_method=split_method,
         frac_train=0.8, 
         frac_val=0.1, 
         frac_test=0.1,
