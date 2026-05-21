@@ -1,0 +1,5 @@
+esol:
+  url: https://huggingface.co/datasets/scikit-fingerprints/MoleculeNet_ESOL/raw/main/esol.csv  
+  sha256: 768a05b6ae300d5dc0750dce68e97b697b43a0d69de2bbb83d5915b3e09d0064  
+  filename: esol.csv
+  description: Delaney 2004 aqueous solubility, 1128 molecules, regression
