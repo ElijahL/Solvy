@@ -19,12 +19,8 @@ bioinformatics-ml/
 ├── README.md                   # architecture diagram + quickstart
 │
 ├── configs/                    # Hydra configs
-│   ├── config.yaml             # default composition
-│   ├── data/
-│   ├── model/
-│   └── trainer/
 │
-├── src/
+├── solvy/
 │   ├── __init__.py
 │   ├── data/
 │   ├── models/
