@@ -22,12 +22,12 @@ The order is quite important as almost every step potentially does some modifica
 
 Take `CC(=O)[O-].[Na+]` (Sodium Acetate) for example. 
 - Uncharge -> fragment parent
-1. uncharge: CC(=O)[O-].[Na+] -> CC(=O)[O-].[Na+] - Nothing happens as the molecule is neutral
-2. fragment_parent: CC(=O)[O-].[Na+] -> CC(=O)[O-] - The base molecule was found (which is charged!)
+1. uncharge: `CC(=O)[O-].[Na+]` -> `CC(=O)[O-].[Na+]` - Nothing happens as the molecule is neutral
+2. fragment_parent: `CC(=O)[O-].[Na+]` -> `CC(=O)[O-]` - The base molecule was found (which is charged!)
 
 - Fragment parent -> uncharge
-1. fragment_parent: CC(=O)[O-].[Na+] -> CC(=O)[O-] - The base molecule was found (which is charged!)
-2. uncharge: CC(=O)[O-] -> CC(=O)O - Charged molecule was neutralized
+1. fragment_parent: `CC(=O)[O-].[Na+]` -> `CC(=O)[O-]` - The base molecule was found (which is charged!)
+2. uncharge: `CC(=O)[O-]` -> `CC(=O)O` - Charged molecule was neutralized
 
 As a result we end up with 2 different structures after performing steps in different order. A code for experimentation can be found in `notebooks/02_scaffolds.ipynb`
 
