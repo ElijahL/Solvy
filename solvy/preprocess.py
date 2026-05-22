@@ -128,7 +128,7 @@ def preprocess(
         )
 
     file_name_fmt = "{name}_{split_type}.parquet"
-    folder_name = Path("data/processed") / split_method
+    folder_name = Path("data/processed") / split_method # TODO: add seed to the folder name
     folder_name.mkdir(parents=True, exist_ok=True)
 
     # Create manifest

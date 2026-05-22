@@ -1,11 +1,10 @@
-from typing import Optional, TypeAlias
+from typing import Optional, TypeAlias, Callable
 from dataclasses import dataclass, field
 from rdkit import Chem
 from rdkit.Chem.MolStandardize import rdMolStandardize
 
 
-class StandardizationException(Exception):
-    ...
+class StandardizationException(Exception): ...
 
 StandardizationStep: TypeAlias = dict[str, str, str] # keys: step, input_smiles, output_smiles
 
@@ -16,6 +15,37 @@ class StandardizationResult:
     steps: list[StandardizationStep] = field(default_factory=list)
     is_dropped: bool = False
     reason: Optional[str] = None
+
+
+def run_standardization_pipeline(mol: Chem.Mol, pipeline: list[tuple[str, Callable]]) -> list[StandardizationStep]:
+    """
+    Return standardization pipeline, raises StandardizationException if unprocesssable
+
+    Parameters
+    ----------
+    mol: rdkit.Chem.Mol
+        rdkit molecule object. *Mutable*
+    pipeline: list of tuples of step name and executable
+        Defines the steps to standardize a molecule
+
+    Return
+    ------
+    list[dict]
+        A list of steps under which the molecule was modified, and what exactly was modified
+    """
+    steps = []
+    for name, fn in pipeline:
+        before = Chem.MolToSmiles(mol)
+        try:
+            mol = fn(mol)
+        except Exception as e:
+            raise StandardizationException(f"{name}_failed: {e}")
+
+        after = Chem.MolToSmiles(mol)
+        if before != after:
+            steps.append({"step": name, "before": before, "after": after})
+
+    return steps
 
 
 def standardize(smiles: str) -> StandardizationResult:
@@ -57,18 +87,12 @@ def standardize(smiles: str) -> StandardizationResult:
     ]
 
     # Standardize molecules recording any failes
-    for name, fn in pipeline:
-        before = Chem.MolToSmiles(mol)
-        try:
-            mol = fn(mol)
-        except StandardizationException as e:
-            res.dropped = True
-            res.reason = f"{name}_failed: {e}"
-            return res
-
-        after = Chem.MolToSmiles(mol)
-        if before != after:
-            res.steps.append({"step": name, "before": before, "after": after})
+    try:
+        res.steps += run_standardization_pipeline(mol, pipeline)
+    except StandardizationException as e:
+        res.dropped = True
+        res.reason = f"{name}_failed: {e}"
+        return res
 
     res.output_smiles = Chem.MolToSmiles(mol)
     return res
