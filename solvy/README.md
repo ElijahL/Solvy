@@ -62,7 +62,3 @@ An example `manifest.json` file:
 }
 ```
 ```
-```
-```
-```
-```
