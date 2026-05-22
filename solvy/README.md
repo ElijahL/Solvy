@@ -1,4 +1,4 @@
-# Description
+# DescriptioDescription
 
 Source code for the project. All utility functions as well as backend and frontend servers are defined here
 
@@ -43,7 +43,6 @@ For each group of splits a `manifest.json` file is created, describing how the s
 
 An example `manifest.json` file:
 ```json
-```json
 {
     "dataset_name": "esol",
     "source_file": "data/raw/esol.csv",
@@ -60,5 +59,4 @@ An example `manifest.json` file:
     "created_at": "2026-05-21T14:02:01.030708+00:00",
     "rdkit_version": "2026.03.1"
 }
-```
 ```
